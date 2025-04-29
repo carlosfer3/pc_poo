@@ -5,7 +5,7 @@ import java.time.LocalTime;
 
 public class Registro {
     private Trabajador trabajador;
-    private LocalDate fecha;
+    private final LocalDate fecha;
     private LocalTime horaIngreso;
     private LocalTime horaSalida;
 
@@ -25,10 +25,6 @@ public class Registro {
 
     public LocalDate getFecha() {
         return fecha;
-    }
-
-    public void setFecha(LocalDate fecha) {
-        this.fecha = fecha;
     }
 
     public LocalTime getHoraIngreso() {
