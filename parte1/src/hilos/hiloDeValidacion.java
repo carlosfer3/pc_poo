@@ -7,7 +7,7 @@ import registrosistema.SistemaRegistro;
 import registrosistema.Registro;
 
 public class hiloDeValidacion extends Thread {
-    
+
     private JTextField txtCodigo;
     private JCheckBox checkEditable;
     private JSpinner spnHora;
@@ -24,43 +24,43 @@ public class hiloDeValidacion extends Thread {
     public void run() {
         String codigo = txtCodigo.getText().trim();
 
-        // 1. Validar existencia del trabajador directamente en la base de datos
-        if (!SistemaRegistro.buscarTrabajador(codigo))
+        // 1. Validar existencia del trabajador
+        if (!SistemaRegistro.getInstancia().buscarTrabajador(codigo)) {
             JOptionPane.showMessageDialog(null, "El trabajador con código " + codigo + " no está registrado.");
             return;
         }
 
-        // 2. Obtener la hora a validar
+        // 2. Obtener hora
         LocalTime horaAValidar;
         try {
             if (checkEditable.isSelected()) {
                 int h = (Integer) spnHora.getValue();
                 int m = (Integer) spnMinuto.getValue();
-                horaAValidar = LocalTime.of(h, m);
+                horaAValidar = LocalTime.of(h, m);//trae la hora manual
             } else {
-                horaAValidar = LocalTime.now();
+                horaAValidar = LocalTime.now();//trae hora del sistema
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error al construir la hora: " + e.getMessage());
             return;
         }
 
-        // 3. Determinar si es ingreso o salida
-        Registro registro = SistemaRegistro.getInstancia().buscarRegistro(codigo);
+        // 3. Buscar registro
+        Registro registro = SistemaRegistro.getInstancia().buscarRegistro(codigo);//ve si marco asistencia el usuario
 
         if (registro == null) {
-            // 🟢 CASO: Ingreso
-            LocalTime horaSalidaReferencia = validadorHora.getHoraNormalSalida();
+            // 🟢 Caso: ingreso
+            LocalTime horaSalidaReferencia = validadorHora.getHoraNormalSalida();//trae la hora de salida normal para la validación
             if (!validadorHora.validarIngresoAntesDeSalida(horaAValidar, horaSalidaReferencia)) {
                 JOptionPane.showMessageDialog(null, "La hora de ingreso no puede ser posterior a la hora de salida normal.");
                 return;
             }
             System.out.println("✓ Validación de ingreso exitosa para " + codigo);
         } else {
-            // 🔵 CASO: Salida
-            LocalTime horaIngreso = registro.getHoraIngreso();
+            // 🔵 Caso: salida
+            LocalTime horaIngreso = registro.getHoraIngreso();//trae la hora de ingreso registrada
             if (horaIngreso == null) {
-                JOptionPane.showMessageDialog(null, "Error: No se puede registrar salida sin haber registrado ingreso.");
+                JOptionPane.showMessageDialog(null, "Error: No se puede registrar salida sin ingreso previo.");
                 return;
             }
             if (!validadorHora.validarSalidaDespuesDeIngreso(horaIngreso, horaAValidar)) {
@@ -68,7 +68,7 @@ public class hiloDeValidacion extends Thread {
                 return;
             }
             if (!validadorHora.validarSalidaDespuesDeHoraNormalIngreso(horaAValidar)) {
-                JOptionPane.showMessageDialog(null, "La hora de salida no puede ser antes de la hora normal de ingreso.");
+                JOptionPane.showMessageDialog(null, "La hora de salida debe ser después de la hora normal de ingreso.");
                 return;
             }
             System.out.println("✓ Validación de salida exitosa para " + codigo);
