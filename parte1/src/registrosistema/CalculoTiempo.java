@@ -3,25 +3,28 @@ package registrosistema;
 import java.time.Duration;
 import java.time.LocalTime;
 
-public class CalculoTiempo {
+public class CalculoTiempo implements CalculadoraTiempo{
     private static final LocalTime ingreso = LocalTime.parse("07:00");
     private static final LocalTime salida = LocalTime.parse("18:00");
-
-    public static LocalTime CalcularTiempoFavor(LocalTime horaIngreso) {
+    
+    @Override
+    public LocalTime CalcularTiempoFavor(LocalTime horaIngreso) {
         Duration duration = Duration.between(ingreso, horaIngreso);
         long horas = duration.toHours();
         long minutos = duration.toMinutes() % 60;
         return LocalTime.of((int) horas, (int) minutos);
     }
-
-    public static LocalTime CalcularTiempoContra(LocalTime horaSalida) {
+    
+    @Override
+    public LocalTime CalcularTiempoContra(LocalTime horaSalida) {
         Duration duration = Duration.between(salida, horaSalida);
         long horas = duration.toHours();
         long minutos = duration.toMinutes() % 60;
         return LocalTime.of((int) horas, (int) minutos);
     }
-
-    public static String CalcularTiempoCompensacion(LocalTime horaIngreso, LocalTime horaSalida) {
+    
+    @Override
+    public String CalcularTiempoCompensacion(LocalTime horaIngreso, LocalTime horaSalida) {
         LocalTime tfavor = CalcularTiempoFavor(horaIngreso);
         LocalTime tcontra = CalcularTiempoContra(horaSalida);
         Duration duracion = Duration.between(tcontra, tfavor); // TF - TC
