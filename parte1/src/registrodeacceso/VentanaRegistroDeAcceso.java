@@ -4,6 +4,7 @@ public class VentanaRegistroDeAcceso extends javax.swing.JFrame {
 
     private final String placeholderCodigo = "20232571A";
     private final String placeholderFecha = "YY/mm/dd";
+    
 
     public VentanaRegistroDeAcceso() {
         FondoPanel fondo = new FondoPanel("/fondosAplication/fondo4difuminado.jpg"); // Cambia por tu imagen
