@@ -1,7 +1,6 @@
 package Validacion;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -10,26 +9,26 @@ import javax.swing.JSpinner;
 
 public class construirLocalDateTime {
 
-    public static LocalDateTime construirDesdeComponentes(
-            JFormattedTextField campoFecha, JSpinner spinnerHora, JSpinner spinnerMinuto) {
-
+    public static LocalDate construirFecha(JFormattedTextField campoFecha) {
         try {
-            // Obtenemos el texto de la fecha
-            String textoFecha = campoFecha.getText().trim();
-            
-            // Formato esperado
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-            LocalDate fecha = LocalDate.parse(textoFecha, formatter);
-            
-            // Obtenemos los valores numéricos de los spinner
+            String textoFecha = campoFecha.getText().trim();//fecha a convertir
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");//mapa para guiar la conversión
+            return LocalDate.parse(textoFecha, formatter); // necesita del texto fecha y del formato
+        } catch (DateTimeParseException | NullPointerException e) {
+            System.out.println("Error al construir LocalDate: " + e.getMessage());
+            return null;
+        }
+    }
+
+    public static LocalTime construirHora(JSpinner spinnerHora, JSpinner spinnerMinuto) {
+        try {
             int hora = (Integer) spinnerHora.getValue();
             int minuto = (Integer) spinnerMinuto.getValue();
-            
-            LocalTime tiempo = LocalTime.of(hora, minuto);
-            return LocalDateTime.of(fecha, tiempo);
-        } catch (DateTimeParseException | NullPointerException | ClassCastException e) {
-            System.out.println("Error al construir LocalDateTime: " + e.getMessage());
+            return LocalTime.of(hora, minuto);//convertir a tipo LocalTime
+        } catch (NullPointerException | ClassCastException e) {
+            System.out.println("Error al construir LocalTime: " + e.getMessage());
             return null;
         }
     }
 }
+
