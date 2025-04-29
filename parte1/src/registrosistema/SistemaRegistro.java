@@ -9,13 +9,11 @@ import java.util.Map;
 
 public class SistemaRegistro {
     private static SistemaRegistro instancia;
-    private BaseDatos db;
+    private BaseDatos db = new BaseDatos();
     private List<Registro> registros = new ArrayList<>();
     private Map<String, String> tcompensacion = new HashMap<>();
 
-    private SistemaRegistro() {
-        db = new BaseDatos();
-    }
+    private SistemaRegistro() {}
 
     public static synchronized SistemaRegistro getInstancia() {
         if (instancia == null) {
@@ -24,6 +22,24 @@ public class SistemaRegistro {
         return instancia;
     }
 
+    /*
+    API
+    */
+    public synchronized void agregarTrabajador(Trabajador trabajador) {
+        db.agregarTrabajador(trabajador);
+    }
+    
+    public synchronized boolean buscarTrabajador(String codigo) {
+        return db.buscarTrabajador(codigo);
+    }
+    
+    public void mostrarTrabajadores() {
+        db.mostrarTrabajadores();
+    }
+    /*
+    API
+    */
+    
     public synchronized void agregarRegistro(Registro r) {
         registros.add(r);
     }
