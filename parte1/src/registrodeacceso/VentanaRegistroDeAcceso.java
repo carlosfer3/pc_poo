@@ -1,10 +1,12 @@
 package registrodeacceso;
+import modelo.resumenTransaccion;
 
 public class VentanaRegistroDeAcceso extends javax.swing.JFrame {
 
     private final String placeholderCodigo = "20232571A";
     private final String placeholderFecha = "yyyy/MM/dd";
-    
+    private java.util.List<resumenTransaccion> listaResumen = new java.util.ArrayList<>();
+
 
     public VentanaRegistroDeAcceso() {
         FondoPanel fondo = new FondoPanel("/fondosAplication/fondo4difuminado.jpg"); // Cambia por tu imagen
