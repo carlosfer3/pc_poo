@@ -20,4 +20,10 @@ public class BaseDatos {
         }
         return false;
     }
+    
+    public void mostrarTrabajadores() {
+        for(Trabajador t : trabajadores) {
+            System.out.println(t.getCodigo());
+        }
+    }
 }
