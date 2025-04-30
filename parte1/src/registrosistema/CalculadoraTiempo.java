@@ -4,9 +4,9 @@ import java.time.Duration;
 import java.time.LocalTime;
 
 public interface CalculadoraTiempo {
-    public LocalTime CalcularTiempoFavor(LocalTime horaIngreso);
+    public Duration CalcularTiempoFavor(LocalTime horaIngreso,LocalTime horaSalida);
     
-    public LocalTime CalcularTiempoContra(LocalTime horaSalida);
+    public Duration CalcularTiempoContra(LocalTime horaIngreso,LocalTime horaSalida);
     
     public String CalcularTiempoCompensacion(LocalTime horaIngreso, LocalTime horaSalida);
 }
