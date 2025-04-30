@@ -2,6 +2,7 @@ package operaciones;
 
 import datos.Inventario;
 import datos.Producto;
+import javax.swing.JOptionPane;
 
 public class AgregarInventario extends OperacionInventario {
     
@@ -10,17 +11,20 @@ public class AgregarInventario extends OperacionInventario {
     }
     
     @Override
-    public void ejecutar(Inventario inventario){
-
-        // Verificar si el producto existe
-        Producto productoExistente = inventario.obtenerProducto(producto);
-        if (productoExistente != null) {
-            // Si el producto existe, no se agrega
-            System.out.println("El producto '" + producto + "' ya existe en el inventario.");
-            return;
-        } 
+    public void validarProducto(Inventario inventario,boolean verificarExistencia){
+        super.validarProducto(inventario,verificarExistencia);
         
+        if (cantidad == 0){
+            JOptionPane.showMessageDialog(null, "La cantidad no puede ser 0");
+            throw new IllegalArgumentException();
+        }
+    }
+    @Override
+    public void ejecutar(Inventario inventario){
+        
+        validarProducto(inventario,false);
         inventario.agregarProducto(producto, cantidad);
         System.out.println("Producto: " + producto + " agregado al inventario.");
+        JOptionPane.showMessageDialog(null, "Producto agregado correctamente");
     }
 }

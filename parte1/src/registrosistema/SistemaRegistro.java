@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SistemaRegistro {
+public class SistemaRegistro implements Marcaciones{
     private static SistemaRegistro instancia;
     private BaseDatos db = new BaseDatos();
     private List<Registro> registros = new ArrayList<>();
@@ -59,23 +59,26 @@ public class SistemaRegistro {
         return null;
     }
     
-    public synchronized void registrarEntrada(String codigo, LocalDate fecha, LocalTime hora) {
+    @Override
+    public synchronized void marcarEntrada(String codigo, LocalDate fecha, LocalTime hora) {
         Trabajador t = new Trabajador(codigo);
         Registro r = new Registro(t, fecha, hora);
         
         agregarRegistro(r);
     }
     
-    public synchronized void registrarSalida(String codigo, LocalTime hora) {
+    @Override
+    public synchronized void marcarSalida(String codigo, LocalTime hora) {
         Registro r = buscarRegistro(codigo);
-        r.AgregarHoraSalida(hora);
-        
+        r.AgregarHoraSalida(hora); 
     }
+    
     public synchronized void agregarTC(String codigo, Registro r) {
+        CalculadoraTiempo calculadoratiempo = new CalculoTiempo();
         LocalTime horaIngreso = r.getHoraIngreso();
         LocalTime horaSalida = r.getHoraSalida();
         
-        String tc = CalculoTiempo.CalcularTiempoCompensacion(horaIngreso, horaSalida);
+        String tc = calculadoratiempo.CalcularTiempoCompensacion(horaIngreso, horaSalida);
         tcompensacion.put(codigo, tc);
     }
     

@@ -2,6 +2,7 @@ package operaciones;
 
 import datos.Inventario;
 import datos.Producto;
+import javax.swing.JOptionPane;
 
 public abstract class OperacionInventario {
     protected String producto;
@@ -13,19 +14,28 @@ public abstract class OperacionInventario {
     }  
     
     // Metodo para validaciones
-    protected void validarProducto(Inventario inventario){
-        if(producto == null || producto.isEmpty()){
-            throw new IllegalArgumentException("El producto es nulo o no existe");
-        }
+    public void validarProducto(Inventario inventario, boolean verificarExistencia){
         
         Producto productoExistente = inventario.obtenerProducto(producto);
-        if (productoExistente == null) {
-            throw new IllegalArgumentException("Producto no encontrado en el inventario.");
+        
+        if (verificarExistencia){
+            if (productoExistente == null) {
+            JOptionPane.showMessageDialog(null, "Producto no encontrado en el inventario.");
+            throw new IllegalArgumentException();
+            }
+        }else {
+            if (productoExistente != null){
+                JOptionPane.showMessageDialog(null, "Este producto ya existe en el inventario.");
+                throw new IllegalArgumentException();
+            }
         }
         
-        if (cantidad <= 0) {
-            throw new IllegalArgumentException("La cantidad debe ser mayor que cero.");
+        // Validar que la cantidad sea mayor que 0
+        if (cantidad < 0) {
+            JOptionPane.showMessageDialog(null, "La cantidad debe ser mayor que cero.");
+            throw new IllegalArgumentException();
         }
+        
     }
     
     // Metodo abstracto que cada operacion debera implementar

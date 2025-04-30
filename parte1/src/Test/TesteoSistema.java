@@ -5,11 +5,11 @@ import registrosistema.Trabajador;
 
 public class TesteoSistema {
     private SistemaRegistro sistema = SistemaRegistro.getInstancia();
-    private GeneradorTrabajador generador;
+    private GeneradorDeTrabajador generadortrabajador = new GeneradorTrabajadorBasico();
     
     public void TestearTrabajadores() {
         for(int i = 0; i < 10; i++) {
-            Trabajador t = GeneradorTrabajador.generarTrabajador();
+            Trabajador t = generadortrabajador.generarTrabajador();
             sistema.agregarTrabajador(t);
         }
     }

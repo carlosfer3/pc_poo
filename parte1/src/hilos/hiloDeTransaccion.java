@@ -28,11 +28,11 @@ public class hiloDeTransaccion extends Thread {
 
         if (registroExistente == null) {
             // 🟢 Caso entrada
-            sistema.registrarEntrada(codigo, fechaActual, horaValidada);
+            sistema.marcarEntrada(codigo, fechaActual, horaValidada);
 
         } else {
             // 🔵 Caso salida
-            sistema.registrarSalida(codigo, horaValidada);
+            sistema.marcarSalida(codigo, horaValidada);
             sistema.agregarTC(codigo, sistema.buscarRegistro(codigo));
         }
 

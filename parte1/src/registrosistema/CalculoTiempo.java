@@ -3,48 +3,53 @@ package registrosistema;
 import java.time.Duration;
 import java.time.LocalTime;
 
-public class CalculoTiempo {
+public class CalculoTiempo implements CalculadoraTiempo{
     private static final LocalTime ingreso = LocalTime.parse("07:00");
     private static final LocalTime salida = LocalTime.parse("18:00");
     
-    /*
-    public static LocalTime CalcularTiempoFavor(LocalTime horaIngreso) {
-        Duration duration = Duration.between(ingreso, horaIngreso).abs();
-        long horas = duration.toHours();
-        long minutos = duration.toMinutes() % 60;
-        return LocalTime.of((int) horas, (int) minutos);
+    
+    @Override
+    public Duration CalcularTiempoFavor(LocalTime horaIngreso, LocalTime horaSalida) {
+        Duration tiempoFavor = Duration.ZERO;
+
+        if (horaIngreso.isBefore(ingreso)) {
+            tiempoFavor = tiempoFavor.plus(Duration.between(horaIngreso, ingreso));
+        }
+        if (horaSalida.isAfter(salida)) {
+            tiempoFavor = tiempoFavor.plus(Duration.between(salida, horaSalida));
+        }
+
+        return tiempoFavor;
+    }
+    
+    @Override
+    public Duration CalcularTiempoContra(LocalTime horaIngreso, LocalTime horaSalida) {
+        Duration tiempoContra = Duration.ZERO;
+
+        if (horaIngreso.isAfter(ingreso)) {
+            tiempoContra = tiempoContra.plus(Duration.between(ingreso, horaIngreso));
+        }
+        if (horaSalida.isBefore(salida)) {
+            tiempoContra = tiempoContra.plus(Duration.between(horaSalida, salida));
+        }
+
+        return tiempoContra;
     }
 
-    public static LocalTime CalcularTiempoContra(LocalTime horaSalida) {
-        Duration duration = Duration.between(salida, horaSalida).abs();
-        long horas = duration.toHours();
-        long minutos = duration.toMinutes() % 60;
-        return LocalTime.of((int) horas, (int) minutos);
-    }
+    
+    @Override
+    public String CalcularTiempoCompensacion(LocalTime horaIngreso, LocalTime horaSalida) {
+        Duration tfavor = CalcularTiempoFavor(horaIngreso, horaSalida);
+        Duration tcontra = CalcularTiempoContra(horaIngreso, horaSalida);
+        Duration compensacion = tfavor.minus(tcontra);
 
-    public static String CalcularTiempoCompensacion(LocalTime horaIngreso, LocalTime horaSalida) {
-        LocalTime tfavor = CalcularTiempoFavor(horaIngreso);
-        LocalTime tcontra = CalcularTiempoContra(horaSalida);
-        Duration duracion = Duration.between(tcontra, tfavor); // TF - TC
-        boolean esNegativo = duracion.isNegative();
-        duracion = duracion.abs();
-        long horas = duracion.toHours();
-        long minutos = duracion.toMinutes() % 60;
-        return String.format("%s%02d:%02d", esNegativo ? "-" : "", horas, minutos);
-    }
-    */
-    public static String CalcularTiempoCompensacion(LocalTime horaIngreso, LocalTime horaSalida) {
-        Duration tiempoEsperado = Duration.between(ingreso, salida);
-        Duration tiempoReal = Duration.between(horaIngreso, horaSalida);
-        Duration compensacion = tiempoReal.minus(tiempoEsperado);
-
-        boolean esNegativo = compensacion.isNegative();
+        boolean negativo = compensacion.isNegative();
         compensacion = compensacion.abs();
 
         long horas = compensacion.toHours();
         long minutos = compensacion.toMinutes() % 60;
 
-        return String.format("%s%02d:%02d", esNegativo ? "-" : "+", horas, minutos);
+        return String.format("%s%02d:%02d", negativo ? "-" : "+", horas, minutos);
     }
 
     public static LocalTime getHoraNormalIngreso() {

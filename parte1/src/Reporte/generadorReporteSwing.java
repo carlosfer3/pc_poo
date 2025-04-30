@@ -3,6 +3,7 @@ package Reporte;
 import registrosistema.SistemaRegistro;
 import registrosistema.CalculoTiempo;
 import registrosistema.Registro;
+import registrosistema.CalculadoraTiempo;
 
 import javax.swing.*;
 import java.util.List;
@@ -18,12 +19,14 @@ public class generadorReporteSwing implements generadorReporte{
     public void generarReporte() {
         StringBuilder reporte = new StringBuilder();
         reporte.append("📋 REPORTE DE COMPENSACIÓN\n\n");
+        
+        CalculadoraTiempo calculador = new CalculoTiempo();//necesario para usar el metodo CalcularTiempoCompensacion porque hicimos el @override y no es un metodo statico
 
         List<Registro> registros = SistemaRegistro.getInstancia().obtenerRegistros();
-
+        
         for (Registro r : registros) {
             if (r.getHoraIngreso() != null && r.getHoraSalida() != null) {
-                String tc = CalculoTiempo.CalcularTiempoCompensacion(r.getHoraIngreso(), r.getHoraSalida());
+                String tc = calculador.CalcularTiempoCompensacion(r.getHoraIngreso(), r.getHoraSalida());
                 reporte.append("Código: ").append(r.getTrabajador().getCodigo()).append("\n");
                 reporte.append("Fecha: ").append(r.getFecha()).append("\n");
                 reporte.append("Hora Ingreso: ").append(r.getHoraIngreso()).append("\n");
