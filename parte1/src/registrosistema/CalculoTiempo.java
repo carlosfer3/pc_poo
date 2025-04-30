@@ -6,7 +6,8 @@ import java.time.LocalTime;
 public class CalculoTiempo {
     private static final LocalTime ingreso = LocalTime.parse("07:00");
     private static final LocalTime salida = LocalTime.parse("18:00");
-
+    
+    /*
     public static LocalTime CalcularTiempoFavor(LocalTime horaIngreso) {
         Duration duration = Duration.between(ingreso, horaIngreso).abs();
         long horas = duration.toHours();
@@ -30,6 +31,20 @@ public class CalculoTiempo {
         long horas = duracion.toHours();
         long minutos = duracion.toMinutes() % 60;
         return String.format("%s%02d:%02d", esNegativo ? "-" : "", horas, minutos);
+    }
+    */
+    public static String CalcularTiempoCompensacion(LocalTime horaIngreso, LocalTime horaSalida) {
+        Duration tiempoEsperado = Duration.between(ingreso, salida);
+        Duration tiempoReal = Duration.between(horaIngreso, horaSalida);
+        Duration compensacion = tiempoReal.minus(tiempoEsperado);
+
+        boolean esNegativo = compensacion.isNegative();
+        compensacion = compensacion.abs();
+
+        long horas = compensacion.toHours();
+        long minutos = compensacion.toMinutes() % 60;
+
+        return String.format("%s%02d:%02d", esNegativo ? "-" : "+", horas, minutos);
     }
 
     public static LocalTime getHoraNormalIngreso() {

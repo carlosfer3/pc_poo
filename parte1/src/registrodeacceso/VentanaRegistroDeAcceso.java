@@ -14,7 +14,7 @@ public class VentanaRegistroDeAcceso extends javax.swing.JFrame {
 
 
     public VentanaRegistroDeAcceso() {
-        FondoPanel fondo = new FondoPanel("/fondosAplication/fondo4difuminado.jpg"); // Cambia por tu imagen
+        FondoPanel fondo = new FondoPanel("/fondosAplication/fondo1madera.jpg"); // Cambia por tu imagen
         this.setContentPane(fondo);
 
         initComponents();
