@@ -8,12 +8,13 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 
-public class Inventario {
+public class Inventario implements GestionInventario{
     
     private Map<String,Producto> productos = new HashMap<>();
     private Lock lock = new ReentrantLock();  //Lock para sincronizacion
     
     // Metodo para agregar un producto
+    @Override
     public void agregarProducto(String nombre, int cantidad){
         lock.lock();
         try{
@@ -23,6 +24,7 @@ public class Inventario {
         }
     }
     
+    @Override
     public Producto obtenerProducto(String nombre){
         lock.lock();
         try{
@@ -32,6 +34,7 @@ public class Inventario {
         }
     }
     
+    @Override
     public List<Producto> obtenerProductos() {
         lock.lock();
         try {
@@ -41,6 +44,7 @@ public class Inventario {
         }
     }
     
+    @Override
     public void realizarOperacion(String nombre, int cantidad){
         lock.lock();
         try{

@@ -15,6 +15,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     
     private Inventario inventarioA;
     private Inventario inventarioB;
+    private Inventario inventarioOrigen;
+    private Inventario inventarioDestino;
+    
     private HistorialOperaciones historialOperaciones;
     
     private DefaultTableModel modeloInventarioA;
@@ -327,26 +330,75 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     private void btnTransferenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTransferenciaActionPerformed
         // Obtener datos del producto
+        final Inventario inventarioOrigen;
+        final Inventario inventarioDestino;
+        
+        String inventarioOrigenStr = (String) cmbInventarioOrigen.getSelectedItem();
+        String inventarioDestinoStr = (String) cmbInventarioDestino.getSelectedItem();
+        
+        if (inventarioOrigenStr.equals(inventarioDestinoStr)){
+            JOptionPane.showMessageDialog(this,"No se puede transferir de un inventario a si mismo.");
+            return;            
+        }
+        
+        // Seleccion de  Inventario Origen
+        switch (inventarioOrigenStr){
+            case "Inventario A":
+                inventarioOrigen = inventarioA;
+                break;
+            case "Inventario B":
+                inventarioOrigen = inventarioB;
+                break;
+            default:
+                return;
+        }
+        
+        // Seleccion de  Inventario Destino
+        switch (inventarioDestinoStr){
+            case "Inventario A":
+                inventarioDestino = inventarioA;
+                break;
+            case "Inventario B":
+                inventarioDestino = inventarioB;
+                break;
+            default:
+                return;
+        }
+
         String producto = txtProducto.getText();
         int cantidad;
         try{
             cantidad = Integer.parseInt(txtCantidad.getText());
         }catch (NumberFormatException e){
-            JOptionPane.showMessageDialog(this, "Cantidad invalida.");
+            JOptionPane.showMessageDialog(this, "Cantidad invalida. Por favor ingrese un número.");
             return;
         }
         
         OperacionInventario transferencia = FabricaOperaciones.crearOperacion("transferencia", producto, cantidad, inventarioDestino);
-        try {
+        
+        executor.submit(()->{
             transferencia.ejecutar(inventarioOrigen);
-            historialOperaciones.agregarOperacion("Transferencia de " + cantidad + " " + producto);
-            JOptionPane.showMessageDialog(this, "Transferencia realizada con éxito: " + cantidad + " " + producto + " transferidos.");
-        } catch (IllegalArgumentException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
-        }
+            historialOperaciones.agregarOperacion("Transferencia de " + cantidad + " " + producto + " a " + inventarioDestinoStr );
+            actualizarTablas();
+        }); 
+        
     }//GEN-LAST:event_btnTransferenciaActionPerformed
 
     private void btnAjusteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAjusteActionPerformed
+        // Obtener el inventario seleccionado
+        final Inventario inventarioSeleccionado;
+        String inventarioSeleccionadoStr = (String) comboBoxInventario.getSelectedItem();
+        
+        switch (inventarioSeleccionadoStr){
+            case "Inventario A":
+                inventarioSeleccionado = inventarioA;
+                break;
+            case "Inventario B":
+                inventarioSeleccionado = inventarioB;
+                break;
+            default:
+                return;
+        }
         
         // Obtener datos del producto
         String producto = txtProducto.getText();
@@ -358,14 +410,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             return;
         }
         
-        OperacionInventario ajuste = FabricaOperaciones.crearOperacion("ajuste", producto, cantidad, null);
-        try {
-            ajuste.ejecutar(inventarioOrigen);
-            historialOperaciones.agregarOperacion("Ajuste de " + cantidad + " " + producto);
-            JOptionPane.showMessageDialog(this, "Ajuste realizado con éxito");
-        } catch (IllegalArgumentException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
-        }
+        OperacionInventario ajuste = FabricaOperaciones.crearOperacion("ajuste", producto, cantidad, inventarioSeleccionado);
+       
+        executor.submit(()->{
+            ajuste.ejecutar(inventarioSeleccionado);
+            historialOperaciones.agregarOperacion("Ajuste  " + cantidad + " " + producto + " a " + inventarioSeleccionadoStr );
+            actualizarTablas();
+        }); 
     }//GEN-LAST:event_btnAjusteActionPerformed
 
     private void btnHistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistorialActionPerformed
@@ -377,12 +428,18 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
         // Obtener el inventario seleccionado
-        final Inventario inventarioSeleccionado = null;
+        final Inventario inventarioSeleccionado;
         String inventarioSeleccionadoStr = (String) comboBoxInventario.getSelectedItem();
-        if (inventarioSeleccionadoStr.equals("Inventario A")){
-            //inventarioSeleccionado = inventarioA;
-        } else if (inventarioSeleccionadoStr.equals("Inventario B")){
-            //inventarioSeleccionado = inventarioB;
+        
+        switch (inventarioSeleccionadoStr){
+            case "Inventario A":
+                inventarioSeleccionado = inventarioA;
+                break;
+            case "Inventario B":
+                inventarioSeleccionado = inventarioB;
+                break;
+            default:
+                return;
         }
         
        // Obtener producto y cantidad
@@ -397,6 +454,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         // Crear y ejecutar la operación de agregar producto
         OperacionInventario agregarProducto = FabricaOperaciones.crearOperacion("agregar", producto, cantidad, inventarioSeleccionado);
+        
         executor.submit(()->{
             agregarProducto.ejecutar(inventarioSeleccionado);
             historialOperaciones.agregarOperacion("Agregar " + cantidad + " " + producto + " a " + inventarioSeleccionadoStr );
@@ -416,7 +474,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         }
         
         for (Producto producto : inventarioB.obtenerProductos()){
-            modeloInventarioA.addRow(new Object[]{producto.getNombre(),producto.getCantidad()});
+            modeloInventarioB.addRow(new Object[]{producto.getNombre(),producto.getCantidad()});
         }
     }
     

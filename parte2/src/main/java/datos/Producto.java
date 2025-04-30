@@ -18,6 +18,6 @@ public class Producto {
     }
     
     public synchronized void actualizarCantidad(int cantidad){
-        this.cantidad += cantidad;
+        this.cantidad = cantidad;
     }
 }
