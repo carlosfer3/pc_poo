@@ -6,17 +6,15 @@ import java.time.LocalTime;
 public class CalculoTiempo implements CalculadoraTiempo{
     private static final LocalTime ingreso = LocalTime.parse("07:00");
     private static final LocalTime salida = LocalTime.parse("18:00");
-    
-    @Override
-    public LocalTime CalcularTiempoFavor(LocalTime horaIngreso) {
+
+    public static LocalTime CalcularTiempoFavor(LocalTime horaIngreso) {
         Duration duration = Duration.between(ingreso, horaIngreso);
         long horas = duration.toHours();
         long minutos = duration.toMinutes() % 60;
         return LocalTime.of((int) horas, (int) minutos);
     }
-    
-    @Override
-    public LocalTime CalcularTiempoContra(LocalTime horaSalida) {
+
+    public static LocalTime CalcularTiempoContra(LocalTime horaSalida) {
         Duration duration = Duration.between(salida, horaSalida);
         long horas = duration.toHours();
         long minutos = duration.toMinutes() % 60;

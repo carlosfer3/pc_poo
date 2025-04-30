@@ -1,11 +1,16 @@
 package registrodeacceso;
-import modelo.resumenTransaccion;
+import hilos.hiloDeTransaccion;
+import hilos.hiloDeValidacion;
+import javax.swing.JOptionPane;
+import Test.TesteoSistema;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import Reporte.generadorReporteSwing;
 
 public class VentanaRegistroDeAcceso extends javax.swing.JFrame {
 
     private final String placeholderCodigo = "20232571A";
     private final String placeholderFecha = "yyyy/MM/dd";
-    private java.util.List<resumenTransaccion> listaResumen = new java.util.ArrayList<>();
 
 
     public VentanaRegistroDeAcceso() {
@@ -14,8 +19,11 @@ public class VentanaRegistroDeAcceso extends javax.swing.JFrame {
 
         initComponents();
         tblRegistro.getTableHeader().setReorderingAllowed(false);
-
-
+        new TesteoSistema().TestearTrabajadoresInternos();
+        
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+        formatFecha1.setText(LocalDate.now().format(formato));
+        formatFecha2.setText(LocalDate.now().format(formato));
     }
 
     @SuppressWarnings("unchecked")
@@ -38,7 +46,7 @@ public class VentanaRegistroDeAcceso extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         txtCodigo2 = new javax.swing.JTextField();
         spnHora2 = new javax.swing.JSpinner();
-        spmMin2 = new javax.swing.JSpinner();
+        spnMin2 = new javax.swing.JSpinner();
         lblHora2 = new javax.swing.JLabel();
         formatFecha2 = new javax.swing.JFormattedTextField();
         jLabel6 = new javax.swing.JLabel();
@@ -61,6 +69,11 @@ public class VentanaRegistroDeAcceso extends javax.swing.JFrame {
 
         jButton1.setForeground(new java.awt.Color(116, 116, 75));
         jButton1.setText("Marcar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         txtCodigo1.setBackground(new java.awt.Color(255, 255, 255));
         txtCodigo1.setForeground(new java.awt.Color(153, 153, 153));
@@ -77,14 +90,18 @@ public class VentanaRegistroDeAcceso extends javax.swing.JFrame {
 
         spnHora1.setModel(new javax.swing.SpinnerNumberModel(0, 0, 23, 1));
         spnHora1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        spnHora1.setEnabled(false);
 
         spnMin1.setModel(new javax.swing.SpinnerNumberModel(0, 0, 59, 1));
+        spnMin1.setEnabled(false);
 
         lblHora1.setForeground(new java.awt.Color(116, 116, 75));
         lblHora1.setText("Hora");
 
+        formatFecha1.setEditable(false);
         formatFecha1.setForeground(new java.awt.Color(153, 153, 153));
         formatFecha1.setText("yyyy/MM/dd");
+        formatFecha1.setFocusable(false);
         formatFecha1.setOpaque(true);
         formatFecha1.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -100,6 +117,11 @@ public class VentanaRegistroDeAcceso extends javax.swing.JFrame {
         checkEditable1.setForeground(new java.awt.Color(153, 153, 153,160));
         checkEditable1.setText("Editable");
         checkEditable1.setOpaque(false);
+        checkEditable1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkEditable1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -159,6 +181,11 @@ public class VentanaRegistroDeAcceso extends javax.swing.JFrame {
 
         jButton2.setForeground(new java.awt.Color(116, 116, 75));
         jButton2.setText("Marcar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         txtCodigo2.setForeground(new java.awt.Color(153, 153, 153));
         txtCodigo2.setText("20232571A");
@@ -173,14 +200,18 @@ public class VentanaRegistroDeAcceso extends javax.swing.JFrame {
         });
 
         spnHora2.setModel(new javax.swing.SpinnerNumberModel(0, 0, 23, 1));
+        spnHora2.setEnabled(false);
 
-        spmMin2.setModel(new javax.swing.SpinnerNumberModel(0, 0, 59, 1));
+        spnMin2.setModel(new javax.swing.SpinnerNumberModel(0, 0, 59, 1));
+        spnMin2.setEnabled(false);
 
         lblHora2.setForeground(new java.awt.Color(116, 116, 75));
         lblHora2.setText("Hora");
 
+        formatFecha2.setEditable(false);
         formatFecha2.setForeground(new java.awt.Color(153, 153, 153));
         formatFecha2.setText("yyyy/MM/dd");
+        formatFecha2.setFocusable(false);
         formatFecha2.setOpaque(true);
         formatFecha2.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -196,6 +227,11 @@ public class VentanaRegistroDeAcceso extends javax.swing.JFrame {
         checkEditable2.setForeground(new java.awt.Color(153, 153, 153,160));
         checkEditable2.setText("Editable");
         checkEditable2.setOpaque(false);
+        checkEditable2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkEditable2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -217,7 +253,7 @@ public class VentanaRegistroDeAcceso extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(spmMin2, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(spnMin2, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(txtCodigo2)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
@@ -237,7 +273,7 @@ public class VentanaRegistroDeAcceso extends javax.swing.JFrame {
                 .addComponent(checkEditable2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(spmMin2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(spnMin2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(spnHora2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblHora2)
                     .addComponent(formatFecha2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -259,17 +295,17 @@ public class VentanaRegistroDeAcceso extends javax.swing.JFrame {
         tblRegistro.setForeground(new java.awt.Color(116, 116, 75));
         tblRegistro.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Cod", "Fecha", "hMI", "hF", "Anto", "TF", "TC"
+                "Cod", "Fecha", "hMI", "hF", "Anto", "TF"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -281,6 +317,11 @@ public class VentanaRegistroDeAcceso extends javax.swing.JFrame {
 
         tbnReporte.setForeground(new java.awt.Color(116, 116, 75));
         tbnReporte.setText("Reporte");
+        tbnReporte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tbnReporteActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -400,6 +441,59 @@ public class VentanaRegistroDeAcceso extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_formatFecha2FocusLost
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        hiloDeValidacion validador = new hiloDeValidacion(txtCodigo1, checkEditable1, spnHora1, spnMin1);
+        validador.start();
+        
+        try {
+        // Esperamos que termine la validación antes de seguir
+            validador.join();
+        } catch (InterruptedException e) {
+            JOptionPane.showMessageDialog(null, "El hilo de validación fue interrumpido.");
+            return;
+        }
+        
+         // Si la validación fue exitosa
+        if (validador.esValido()) {
+            // Lanzar hilo de transacción
+            new hiloDeTransaccion(validador.getCodigo(), validador.getHoraValidada(), tblRegistro).start();
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        hiloDeValidacion validador = new hiloDeValidacion(txtCodigo2, checkEditable2, spnHora2, spnMin2);
+        validador.start();
+        
+        try {
+        // Esperamos que termine la validación antes de seguir
+            validador.join();
+        } catch (InterruptedException e) {
+            JOptionPane.showMessageDialog(null, "El hilo de validación fue interrumpido.");
+            return;
+        }
+        
+         // Si la validación fue exitosa
+        if (validador.esValido()) {
+            // Lanzar hilo de transacción
+            new hiloDeTransaccion(validador.getCodigo(), validador.getHoraValidada(), tblRegistro).start();
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void checkEditable1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkEditable1ActionPerformed
+        spnHora1.setEnabled(true);
+        spnMin1.setEnabled(true);
+    }//GEN-LAST:event_checkEditable1ActionPerformed
+
+    private void checkEditable2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkEditable2ActionPerformed
+        spnHora2.setEnabled(true);
+        spnMin2.setEnabled(true);
+    }//GEN-LAST:event_checkEditable2ActionPerformed
+
+    private void tbnReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbnReporteActionPerformed
+        generadorReporteSwing generador = new generadorReporteSwing(this);
+        generador.generarReporte();
+    }//GEN-LAST:event_tbnReporteActionPerformed
+
     public static void main(String args[]) {
 
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -428,10 +522,10 @@ public class VentanaRegistroDeAcceso extends javax.swing.JFrame {
     private javax.swing.JLabel lblHora1;
     private javax.swing.JLabel lblHora2;
     private javax.swing.JPanel panelPrincipal;
-    private javax.swing.JSpinner spmMin2;
     private javax.swing.JSpinner spnHora1;
     private javax.swing.JSpinner spnHora2;
     private javax.swing.JSpinner spnMin1;
+    private javax.swing.JSpinner spnMin2;
     private javax.swing.JTable tblRegistro;
     private javax.swing.JButton tbnReporte;
     private javax.swing.JTextField txtCodigo1;
