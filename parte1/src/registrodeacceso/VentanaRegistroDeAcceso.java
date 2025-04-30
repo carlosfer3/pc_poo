@@ -1,10 +1,12 @@
 package registrodeacceso;
+import modelo.resumenTransaccion;
 
 public class VentanaRegistroDeAcceso extends javax.swing.JFrame {
 
     private final String placeholderCodigo = "20232571A";
-    private final String placeholderFecha = "YY/mm/dd";
-    
+    private final String placeholderFecha = "yyyy/MM/dd";
+    private java.util.List<resumenTransaccion> listaResumen = new java.util.ArrayList<>();
+
 
     public VentanaRegistroDeAcceso() {
         FondoPanel fondo = new FondoPanel("/fondosAplication/fondo4difuminado.jpg"); // Cambia por tu imagen
@@ -82,7 +84,7 @@ public class VentanaRegistroDeAcceso extends javax.swing.JFrame {
         lblHora1.setText("Hora");
 
         formatFecha1.setForeground(new java.awt.Color(153, 153, 153));
-        formatFecha1.setText("YY/mm/dd");
+        formatFecha1.setText("yyyy/MM/dd");
         formatFecha1.setOpaque(true);
         formatFecha1.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -178,7 +180,7 @@ public class VentanaRegistroDeAcceso extends javax.swing.JFrame {
         lblHora2.setText("Hora");
 
         formatFecha2.setForeground(new java.awt.Color(153, 153, 153));
-        formatFecha2.setText("YY/mm/dd");
+        formatFecha2.setText("yyyy/MM/dd");
         formatFecha2.setOpaque(true);
         formatFecha2.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -249,11 +251,10 @@ public class VentanaRegistroDeAcceso extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI Black", 0, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("REGISTRO DE USUARIOS");
+        jLabel1.setText("MARCARCION TRABAJADOR");
 
         jPanel3.setBackground(new java.awt.Color(226, 247, 253,150));
 
-        tblRegistro.setBackground(new java.awt.Color(255, 255, 255));
         tblRegistro.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         tblRegistro.setForeground(new java.awt.Color(116, 116, 75));
         tblRegistro.setModel(new javax.swing.table.DefaultTableModel(
