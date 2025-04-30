@@ -44,6 +44,10 @@ public class SistemaRegistro {
         registros.add(r);
     }
     
+    public synchronized List<Registro> obtenerRegistros() {
+        return new ArrayList<>(registros); // Devuelve una copia para evitar modificar directamente la lista original
+    }
+    
     public synchronized Registro buscarRegistro(String codigo) {
         for(Registro r : registros) {
             Trabajador t = r.getTrabajador();

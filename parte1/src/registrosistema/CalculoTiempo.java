@@ -8,14 +8,14 @@ public class CalculoTiempo {
     private static final LocalTime salida = LocalTime.parse("18:00");
 
     public static LocalTime CalcularTiempoFavor(LocalTime horaIngreso) {
-        Duration duration = Duration.between(ingreso, horaIngreso);
+        Duration duration = Duration.between(ingreso, horaIngreso).abs();
         long horas = duration.toHours();
         long minutos = duration.toMinutes() % 60;
         return LocalTime.of((int) horas, (int) minutos);
     }
 
     public static LocalTime CalcularTiempoContra(LocalTime horaSalida) {
-        Duration duration = Duration.between(salida, horaSalida);
+        Duration duration = Duration.between(salida, horaSalida).abs();
         long horas = duration.toHours();
         long minutos = duration.toMinutes() % 60;
         return LocalTime.of((int) horas, (int) minutos);
