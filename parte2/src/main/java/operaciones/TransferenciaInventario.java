@@ -33,7 +33,7 @@ public class TransferenciaInventario extends OperacionInventario {
         
         Producto productoDestino = inventarioDestino.obtenerProducto(producto);
         if (productoDestino != null){
-            productoDestino.actualizarCantidad(productoExistente.getCantidad() + cantidad);
+            productoDestino.actualizarCantidad(productoDestino.getCantidad() + cantidad);
         } else {
             inventarioDestino.agregarProducto(producto, cantidad);
         }
